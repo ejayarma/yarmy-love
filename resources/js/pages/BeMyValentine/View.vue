@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3'
+import { Head, useForm } from '@inertiajs/vue3'
 import { Heart, Lock } from 'lucide-vue-next'
 import { ref } from 'vue'
+import BeMyValentineController from '@/actions/App/Http/Controllers/BeMyValentineController'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Spinner } from '@/components/ui/spinner'
+// import { Spinner } from '@/components/ui/spinner'
 import AppLayout from '@/layouts/AppLayout.vue'
+
+
+const pinForm = useForm({
+    pincode: '',
+})
+
+const responseForm = useForm({
+    response: 'yes' as 'yes' | 'no',
+})
 
 const props = defineProps<{
     token: string
@@ -66,6 +76,7 @@ const dodgeNo = (e: MouseEvent) => {
 
 <template>
     <AppLayout>
+
         <Head title="A Valentine Question 💖" />
 
         <div class="min-h-screen flex items-center justify-center px-4">
@@ -80,19 +91,24 @@ const dodgeNo = (e: MouseEvent) => {
                         </div>
                         <h1 class="text-2xl font-bold">Enter PIN to View 💌</h1>
 
-                        <Input
-                            v-model="pincode"
-                            maxlength="4"
-                            placeholder="4-digit PIN"
-                            class="text-center tracking-widest"
-                        />
+                        <Input v-model="pincode" maxlength="4" placeholder="4-digit PIN"
+                            class="text-center tracking-widest" />
 
                         <p v-if="error" class="text-sm text-destructive">{{ error }}</p>
 
-                        <Button @click="reveal" :disabled="loading" class="w-full">
+                        <!-- <Button @click="reveal" :disabled="loading" class="w-full">
                             <Spinner v-if="loading" class="mr-2" />
                             Unlock Message
+                        </Button> -->
+                        <Button @click="pinForm.post(BeMyValentineController.verify.url(token))"
+                            :disabled="pinForm.processing">
+                            Unlock Message
                         </Button>
+
+                        <p v-if="pinForm.errors.pincode" class="text-destructive">
+                            {{ pinForm.errors.pincode }}
+                        </p>
+
                     </template>
 
                     <!-- MESSAGE VIEW -->
@@ -114,30 +130,33 @@ const dodgeNo = (e: MouseEvent) => {
                         </div>
 
                         <div class="flex justify-center gap-4 pt-4 relative">
-                            <Button
-                                class="px-10"
-                                @click="respond('yes')"
-                            >
+                            <!-- <Button class="px-10" @click="respond('yes')">
                                 Yes 💖
                             </Button>
 
+                            <Button variant="outline" class="px-10 transition-transform" @click="respond('no')"
+                                @mouseenter="data.forceYes ? dodgeNo : null">
+                                No 💔
+                            </Button> -->
                             <Button
-                                variant="outline"
-                                class="px-10 transition-transform"
-                                @click="respond('no')"
-                                @mouseenter="data.forceYes ? dodgeNo : null"
-                            >
+                                @click="responseForm.post(BeMyValentineController.respond.url(token))">
+                                Yes 💖
+                            </Button>
+
+                            <Button variant="outline" @mouseenter="forceYes ? dodgeNo : null"
+                                @click="responseForm.post(BeMyValentineController.respond.url(token))">
                                 No 💔
                             </Button>
+
                         </div>
                     </template>
 
                     <!-- NO PIN REQUIRED -->
-                    <template v-else>
+                    <!-- <template v-else>
                         <Button @click="reveal" class="w-full">
                             View Valentine 💘
                         </Button>
-                    </template>
+                    </template> -->
                 </div>
             </div>
         </div>

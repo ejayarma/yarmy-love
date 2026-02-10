@@ -17,7 +17,7 @@ class BeMyValentineController extends Controller
      */
     public function create()
     {
-        return Inertia::render('BeMyVal');
+        return Inertia::render('BeMyValentine/Create');
     }
 
     /**
@@ -148,7 +148,7 @@ class BeMyValentineController extends Controller
 
     public function show(Valentine $valentine)
     {
-        return Inertia::render('ValentineView', [
+        return Inertia::render('BeMyValentine/View', [
             'valentine' => [
                 'token' => $valentine->token,
                 'requiresPincode' => ! is_null($valentine->pincode),
