@@ -57,7 +57,7 @@ Route::middleware(AuthenticateWithOtp::class)->group(function () {
     });
 
     Route::prefix('gift')->group(function () {
-        Route::get('/{slug}', [Love2FAController::class, 'show'])->name('love2fa.show')->middleware('throttle:10,1');
+        Route::get('/{slug}', [Love2FAController::class, 'show'])->name('love2fa.gift.show')->middleware('throttle:10,1');
         Route::post('/{slug}/verify', [Love2FAController::class, 'verify'])->name('love2fa.verify')->middleware('throttle:10,1');
     });
 
