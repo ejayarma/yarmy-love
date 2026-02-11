@@ -79,3 +79,5 @@ Route::middleware(AuthenticateWithOtp::class)->group(function () {
     });
 
 });
+
+require __DIR__.'/settings.php';
