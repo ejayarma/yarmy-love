@@ -185,7 +185,7 @@
             </div>
 
             <div class="footer">
-                <p>💕 Made with love by Yarmy Love 💕</p>
+                <p>💕 Made with love by <b><a target="_blank" href="https://yarmy.tech">Yarmy Tech</a></b> 💕</p>
                 <p>Secure authentication for your Valentine's Day 2026</p>
                 <p style="font-size: 12px; color: #ccc; margin-top: 20px;">
                     This email was sent because someone requested a login code for this email address

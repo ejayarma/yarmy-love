@@ -113,7 +113,7 @@
             </a> --}}
 
             <p class="footer">
-                💖 Made with love • Valentine's Day 2026<br>
+                💖 Made with love by <b><a target="_blank" href="https://yarmy.tech">Yarmy Tech</a></b> • Valentine's Day 2026<br>
                 Share wisely… hearts may be broken 😉
             </p>
         </div>

@@ -16,14 +16,13 @@ const submit = () => {
 </script>
 
 <template>
+
     <Head title="Login to Yarmy Love" />
 
     <div class="min-h-screen relative overflow-hidden">
         <!-- Background Image with Overlay -->
-        <div
-            class="fixed inset-0 z-0"
-            style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"
-        >
+        <div class="fixed inset-0 z-0"
+            style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="absolute inset-0 bg-linear-to-br from-red-900/40 via-rose-800/30 to-pink-900/40"></div>
         </div>
 
@@ -62,26 +61,17 @@ const submit = () => {
                         <form @submit.prevent="submit" class="space-y-6">
                             <div class="grid gap-2">
                                 <Label for="email">Email Address</Label>
-                                <Input
-                                    id="email"
-                                    v-model="form.email"
-                                    type="email"
-                                    required
-                                    placeholder="your@email.com"
-                                    class="text-lg"
-                                    autofocus
-                                />
+                                <Input id="email" v-model="form.email" type="email" required
+                                    placeholder="your@email.com" class="text-lg" autofocus />
                                 <p class="text-sm text-gray-600">
                                     Use the same email you used to create Valentine requests
                                 </p>
                                 <InputError :message="form.errors.email" />
                             </div>
 
-                            <Button
-                                type="submit"
+                            <Button type="submit"
                                 class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-6 text-lg"
-                                :disabled="form.processing"
-                            >
+                                :disabled="form.processing">
                                 <Mail class="w-5 h-5 mr-2" />
                                 Send Verification Code
                             </Button>
@@ -98,13 +88,14 @@ const submit = () => {
 
                 <!-- Footer -->
                 <div class="my-8 text-center">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
                         <Heart class="w-4 h-4 text-pink-200 fill-current" />
-                        <span class="text-sm text-white">Made with love by <a class="font-medium" target="_blank" href="http://yarmy.tech">Yarmy Tech</a> 💕</span>
+                        <span class="text-sm text-white">Made with love by <a class="font-medium" target="_blank"
+                                href="https://yarmy.tech">Yarmy Tech</a> 💕</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
-

@@ -357,7 +357,7 @@
             @endif
 
             <div class="footer">
-                <p>💕 Made with love by Yarmy Love 💕</p>
+                <p>💕 Made with love by <b><a target="_blank" href="https://yarmy.tech">Yarmy Tech</a></b> 💕</p>
                 <p>Keeping the mystery alive this Valentine's Day 2026</p>
                 <p style="font-size: 12px; color: #ccc; margin-top: 20px;">
                     This email was sent because someone attempted to guess your identity in your Love 2FA mystery

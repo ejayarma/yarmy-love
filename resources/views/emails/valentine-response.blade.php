@@ -84,7 +84,7 @@
         @endif
 
         <p class="footer">
-            💌 Sent via BeMyVal • Valentine's Day<br>
+            💌 Sent via Yarmy Love by <b><a target="_blank" href="https://yarmy.tech">Yarmy Tech</a></b> • Valentine's Day 2026<br>
             Courage looks good on you.
         </p>
     </div>
