@@ -2,14 +2,14 @@
 
 namespace App\Mail;
 
-use App\Models\Valentine;
+use App\Models\Otp;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ValentineResponseMail extends Mailable
+class OtpMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,9 +17,7 @@ class ValentineResponseMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public Valentine $valentine,
-        public string $response,
-        public ?string $message = null
+        public Otp $otp
     ) {}
 
     /**
@@ -27,14 +25,8 @@ class ValentineResponseMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        $subject = match ($this->response) {
-            'yes' => '🎉 They Said YES to Your Valentine Request!',
-            'no' => '💌 Response to Your Valentine Request',
-            default => '📬 Valentine Response Received',
-        };
-
         return new Envelope(
-            subject: $subject,
+            subject: 'Your Login Code for Yarmy Love',
         );
     }
 
@@ -44,11 +36,11 @@ class ValentineResponseMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.valentine-response',
+            view: 'emails.otp',
             with: [
-                'recipientName' => $this->valentine->sender_name,
-                'response' => $this->response,
-                'loveMessage' => $this->message,
+                'otpCode' => $this->otp->otp,
+                'expiresAt' => $this->otp->expires_at,
+                'expiresInMinutes' => $this->otp->expires_at->diffInMinutes(now()),
             ],
         );
     }

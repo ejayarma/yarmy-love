@@ -49,6 +49,31 @@
             font-size: 14px;
             color: #999;
         }
+
+        .pin-box {
+            background: #FFF9E6;
+            border: 3px dashed #FFC107;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .pin-label {
+            font-size: 14px;
+            color: #F57C00;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .pin {
+            font-size: 40px;
+            font-weight: 700;
+            color: #DD0000;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
     </style>
 </head>
 <body>
@@ -68,12 +93,27 @@
                 and wait for their answer 💕
             </p>
 
-            <a href="{{ $valentineUrl }}" class="button">
+            @if(!empty($pinCode))
+            <div class="pin-box">
+                <div class="pin-label">🔑 Share This PIN Code</div>
+                <div class="pin">{{ $pinCode }}</div>
+                <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                    {{ $senderName }} needs this 4-digit PIN to unlock the mystery!
+                </p>
+            </div>
+            @endif
+
+
+            <p>Share this link with your special someone:</p>
+            <p style="margin-top: 30px; font-size: 16px; color: #333;">
+                {{ $valentineUrl }}
+            </p>
+            {{-- <a href="{{ $valentineUrl }}" class="button">
                 Open Valentine Link
-            </a>
+            </a> --}}
 
             <p class="footer">
-                💖 Made with love • Valentine’s Day 2026<br>
+                💖 Made with love • Valentine's Day 2026<br>
                 Share wisely… hearts may be broken 😉
             </p>
         </div>

@@ -1,196 +1,174 @@
 <script setup lang="ts">
-import { Head, useForm } from '@inertiajs/vue3'
-import { Heart, Lock } from 'lucide-vue-next'
-import { ref } from 'vue'
-import BeMyValentineController from '@/actions/App/Http/Controllers/BeMyValentineController'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-// import { Spinner } from '@/components/ui/spinner'
-import AppLayout from '@/layouts/AppLayout.vue'
+import { Head, useForm } from '@inertiajs/vue3';
+import { Heart, MessageCircle } from 'lucide-vue-next';
+import { ref } from 'vue';
+import BeMyValentineController from '@/actions/App/Http/Controllers/BeMyValentineController';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
+type Props = {
+    valentine: {
+        id: number;
+        slug: string;
+        sender_name: string;
+        crush_name: string;
+        message: string;
+        force_yes: boolean;
+    };
+};
 
-const pinForm = useForm({
-    pincode: '',
-})
+const props = defineProps<Props>();
 
-const responseForm = useForm({
-    response: 'yes' as 'yes' | 'no',
-})
+const showMessageBox = ref(false);
 
-const props = defineProps<{
-    token: string
-    requiresPincode: boolean
-    forceYes: boolean
-    crushName: string
-    authorName: string
-    message: string
-}>()
+const form = useForm({
+    response: 'yes' as 'yes' | 'no' | 'maybe',
+    message: '',
+});
 
-const loading = ref(false)
-const error = ref<string | null>(null)
-const revealed = ref(false)
+const respond = (response: 'yes' | 'no' | 'maybe') => {
+    form.response = response;
 
-const pincode = ref('')
-const data = ref<{
-    authorName: string
-    crushName: string
-    message: string
-    forceYes: boolean
-} | null>(null)
-
-const verifyPin = () => {
-    pinForm.post(BeMyValentineController.verify.url(props.token), {
-        onSuccess: () => {
-            revealed.value = true
-        },
-    })
-}
-
-const reveal = async () => {
-    loading.value = true
-    error.value = null
-
-    try {
-        const res = await fetch(`/valentine/${props.token}/verify`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pincode: pincode.value }),
-        })
-
-        const json = await res.json()
-
-        if (!json.success) {
-            error.value = json.error
-        } else {
-            data.value = json
-            revealed.value = true
-        }
-    } catch {
-        error.value = 'Something went wrong. Please try again.'
-    } finally {
-        loading.value = false
+    if (response === 'yes') {
+        showMessageBox.value = true;
+    } else {
+        form.post(BeMyValentineController.respond.url(props.valentine.slug), {
+            preserveScroll: true,
+        });
     }
-}
+};
 
-const respond = async (response: 'yes' | 'no') => {
-    await fetch(`/valentine/${props.token}/respond`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ response }),
-    })
-}
+const submitWithMessage = () => {
+    form.post(BeMyValentineController.respond.url(props.valentine.slug));
+};
 
 const dodgeNo = (e: MouseEvent) => {
-    const btn = e.target as HTMLElement
-    btn.style.transform = `translate(${Math.random() * 120 - 60}px, ${Math.random() * 80 - 40}px)`
-}
+    if (props.valentine.force_yes) {
+        const btn = e.target as HTMLElement;
+        const randomX = Math.random() * 200 - 100;
+        const randomY = Math.random() * 150 - 75;
+        btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        btn.style.transition = 'transform 0.3s ease';
+    }
+};
 </script>
 
 <template>
-    <AppLayout>
 
-        <Head title="A Valentine Question 💖" />
+    <Head :title="`${valentine.crush_name}, will you be my Valentine?`" />
 
-        <div class="min-h-screen flex items-center justify-center px-4">
-            <div class="w-full max-w-xl relative rounded-2xl overflow-hidden shadow-2xl">
+    <div class="min-h-screen relative overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="fixed inset-0 z-0"
+            style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div class="absolute inset-0 bg-linear-to-br from-red-900/40 via-rose-800/30 to-pink-900/40"></div>
+        </div>
 
-                <div class="fixed inset-0 z-0"
-                    style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-                    <div class="absolute inset-0 bg-gradient-to-br from-red-900/40 via-rose-800/30 to-pink-900/40">
+        <!-- Content -->
+        <div class="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
+            <div class="w-full max-w-2xl">
+                <!-- Main Card -->
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="absolute inset-0 bg-white/95 backdrop-blur-xl border-2 border-white/50"></div>
+                    <div class="relative p-8 md:p-12">
+                        <!-- Header -->
+                        <div class="text-center mb-8">
+                            <div class="mb-6 flex justify-center">
+                                <div class="p-4 rounded-full bg-linear-to-br from-red-100 to-pink-100">
+                                    <Heart class="w-16 h-16 text-red-500 fill-current animate-pulse" />
+                                </div>
+                            </div>
+
+                            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                {{ valentine.crush_name }},<br />
+                                Will you be my Valentine? 💕
+                            </h1>
+
+                            <p class="text-lg text-gray-600">
+                                From <strong class="text-red-600">{{ valentine.sender_name }}</strong>
+                            </p>
+                        </div>
+
+                        <!-- Message -->
+                        <div
+                            class="bg-linear-to-br from-pink-50 to-red-50 rounded-xl p-6 mb-8 border-2 border-pink-200">
+                            <p class="text-gray-700 leading-relaxed whitespace-pre-line text-center italic">
+                                "{{ valentine.message }}"
+                            </p>
+                        </div>
+
+                        <!-- Response Buttons (if not showing message box) -->
+                        <div v-if="!showMessageBox" class="space-y-4">
+                            <p class="text-center text-gray-600 mb-6">How do you feel?</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- Yes Button -->
+                                <Button @click="respond('yes')"
+                                    class="w-full bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 py-6 text-lg"
+                                    :disabled="form.processing">
+                                    <Heart class="w-5 h-5 mr-2 fill-current" />
+                                    Yes! 💖
+                                </Button>
+
+                                <!-- Maybe Button -->
+                                <!-- <Button @click="respond('maybe')" variant="outline"
+                                    class="w-full py-6 text-lg border-2 hover:bg-yellow-50" :disabled="form.processing">
+                                    Maybe 💭
+                                </Button> -->
+
+                                <!-- No Button -->
+                                <Button @click="respond('no')" @mouseenter="dodgeNo" variant="outline"
+                                    class="w-full py-6 text-lg border-2 hover:bg-gray-50 transition-transform"
+                                    :disabled="form.processing">
+                                    No 💔
+                                </Button>
+                            </div>
+
+                            <p v-if="valentine.force_yes" class="text-xs text-center text-gray-500 mt-4">
+                                💡 Tip: The "No" button is a bit shy...
+                            </p>
+                        </div>
+
+                        <!-- Optional Message Box (shown after clicking Yes) -->
+                        <div v-else class="space-y-4">
+                            <div class="bg-green-50 border-2 border-green-200 rounded-xl p-6 text-center mb-6">
+                                <p class="text-2xl mb-2">🎉</p>
+                                <p class="text-green-800 font-semibold">Yay! That's wonderful!</p>
+                                <p class="text-sm text-green-700 mt-2">Want to add a message for {{
+                                    valentine.sender_name }}?</p>
+                            </div>
+
+                            <div class="grid gap-2">
+                                <Label for="message">Your Message (Optional)</Label>
+                                <Textarea id="message" v-model="form.message" :rows="4"
+                                    placeholder="Write something sweet back..." class="resize-none" />
+                            </div>
+
+                            <div class="flex gap-3">
+                                <Button @click="submitWithMessage"
+                                    class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-6 text-lg"
+                                    :disabled="form.processing">
+                                    <MessageCircle class="w-5 h-5 mr-2" />
+                                    Send Response
+                                </Button>
+                                <Button @click="showMessageBox = false" variant="outline" :disabled="form.processing">
+                                    Back
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="relative z-10 p-8 text-center space-y-6">
-                    <div class="absolute inset-0 h-full bg-white/95 backdrop-blur-xl border-2 border-white/50"></div>
-
-                    <!-- PIN GATE -->
-                    <div class="relative z-20 space-y-5">
-                        <template v-if="!revealed && requiresPincode">
-                            <div class="flex justify-center">
-                                <Lock class="w-12 h-12 text-primary" />
-                            </div>
-                            <h1 class="text-2xl font-bold">Enter PIN to View 💌</h1>
-
-                            <Input autofocus v-model="pincode" maxlength="4" placeholder="4-digit PIN"
-                                class="text-center tracking-widest" />
-
-                            <p v-if="error" class="text-sm text-destructive">{{ error }}</p>
-
-                            <Button
-                                class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
-                                @click="verifyPin"
-                                :disabled="pinForm.processing">
-                                Unlock Message
-                            </Button>
-
-                            <p v-if="pinForm.errors.pincode" class="text-destructive">
-                                {{ pinForm.errors.pincode }}
-                            </p>
-
-                        </template>
-
-                        <!-- MESSAGE VIEW -->
-                        <template v-else-if="revealed && data">
-                            <div class="flex justify-center">
-                                <Heart class="w-14 h-14 text-primary fill-current animate-pulse" />
-                            </div>
-
-                            <h1 class="text-3xl font-bold">
-                                {{ props?.crushName }}, will you be my Valentine? 💕
-                            </h1>
-
-                            <p class="text-lg text-muted-foreground">
-                                From <strong>{{ props?.authorName }}</strong>
-                            </p>
-
-                            <div class="bg-secondary rounded-xl p-6 text-left">
-                                <p class="whitespace-pre-line">{{ props?.message }}</p>
-                            </div>
-
-                            <!-- <div class="flex justify-center gap-4 pt-4 relative">
-                                <Button
-                                    class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
-                                    @click="responseForm.post(BeMyValentineController.respond.url(token))">
-                                    Yes 💖
-                                </Button>
-
-                                <Button
-                                    class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
-                                    variant="outline" @mouseenter="props.forceYes ? dodgeNo : null"
-                                    @click="responseForm.post(BeMyValentineController.respond.url(token))">
-                                    No 💔
-                                </Button>
-                            </div> -->
-
-                            <!-- Yes button -->
-                            <Button
-                                class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
-                                @click="responseForm.post(BeMyValentineController.respond.url(token))">
-                                Yes 💖
-                            </Button>
-
-                            <!-- "No" button – but not really -->
-                            <Button
-                                class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
-                                variant="outline" @mouseenter="props.forceYes ? dodgeNo : null"
-                                @click="responseForm.post(BeMyValentineController.respond.url(token))">
-                                No 💔
-                            </Button>
-
-                        </template>
-                        <!-- NO PIN REQUIRED -->
-                        <div>
-                            <Button
-                                class="flex-1 w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
-                                @click="reveal">
-                                View Valentine
-                                <Heart class="w-5 h-5 ml-2 fill-current" />
-                            </Button>
-                        </div>
+                <!-- Footer -->
+                <div class="mt-8 text-center">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                        <Heart class="w-4 h-4 text-pink-200 fill-current" />
+                        <span class="text-sm text-white">Made with love by Yarmy Love 💕</span>
                     </div>
-
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </div>
 </template>

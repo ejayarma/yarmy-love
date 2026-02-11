@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
-import { Lock, Gift, Heart } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { Lock, Heart } from 'lucide-vue-next';
+import BeMyValentineController from '@/actions/App/Http/Controllers/BeMyValentineController';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import Love2FAController from '@/actions/App/Http/Controllers/Love2FAController';
 
 type Props = {
-    love2fa: {
+    valentine: {
         id: number;
-        recipient_name: string;
         slug: string;
-        is_unlocked: boolean;
+        crush_name: string;
     };
 };
 
@@ -24,13 +22,15 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(Love2FAController.unlock.url(props.love2fa.slug));
+    form.post(BeMyValentineController.unlock.url(props.valentine.slug), {
+        preserveScroll: true,
+    });
 };
 </script>
 
 <template>
 
-    <Head :title="`Mystery Gift for ${love2fa.recipient_name}`" />
+    <Head :title="`Valentine for ${valentine.crush_name}`" />
 
     <div class="min-h-screen relative overflow-hidden">
         <!-- Background Image with Overlay -->
@@ -46,17 +46,14 @@ const submit = () => {
                 <div class="text-center mb-8">
                     <div class="mb-6 flex justify-center animate-bounce">
                         <div class="p-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                            <Gift class="w-16 h-16 text-pink-200" />
+                            <Heart class="w-16 h-16 text-pink-200 fill-current" />
                         </div>
                     </div>
                     <h1 class="text-4xl md:text-5xl font-bold text-white drop-shadow-2xl mb-3">
-                        Mystery Gift 🎁
+                        Hey {{ valentine.crush_name }}! 💕
                     </h1>
                     <p class="text-xl text-pink-50 drop-shadow-lg">
-                        Hey {{ love2fa.recipient_name }}!
-                    </p>
-                    <p class="text-lg text-pink-100 drop-shadow-lg mt-2">
-                        You have a secret admirer... 💕
+                        Someone has a Valentine's question for you...
                     </p>
                 </div>
 
@@ -70,8 +67,8 @@ const submit = () => {
                             </div>
                             <h2 class="text-2xl font-bold text-gray-900 mb-2">Enter Your PIN</h2>
                             <p class="text-gray-600">
-                                Your secret admirer gave you a 4-digit PIN.<br />
-                                Enter it to unlock the mystery!
+                                Your admirer gave you a 4-digit PIN.<br />
+                                Enter it to see their message!
                             </p>
                         </div>
 
@@ -88,13 +85,13 @@ const submit = () => {
                                 class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-6 text-lg"
                                 :disabled="form.processing">
                                 <Lock class="w-5 h-5 mr-2" />
-                                Unlock Mystery
+                                Unlock Message
                             </Button>
                         </form>
 
                         <div class="mt-6 p-4 bg-pink-50 rounded-lg">
                             <p class="text-sm text-gray-700 text-center">
-                                💡 <strong>Tip:</strong> Check your messages or email from your secret admirer!
+                                💡 <strong>Tip:</strong> Check your messages for the PIN!
                             </p>
                         </div>
                     </div>

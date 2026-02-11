@@ -39,7 +39,8 @@ class ValentineCreatedMail extends Mailable
             view: 'emails.valentine-created',
             with: [
                 'senderName' => $this->valentine->sender_name,
-                'valentineUrl' => route('valentine.show', $this->valentine->token),
+                'pinCode' => $this->valentine->pincode,
+                'valentineUrl' => route('valentine.show', $this->valentine->slug),
             ],
         );
     }

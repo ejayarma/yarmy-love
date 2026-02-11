@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Link, router } from '@inertiajs/vue3';
-import { Gift, Heart, Lock, Sparkles } from 'lucide-vue-next';
+import { router, useForm } from '@inertiajs/vue3';
+import { Heart, Lock, Sparkles } from 'lucide-vue-next';
 import BeMine from '@/components/icons/BeMine.vue';
 import GiftBox from '@/components/icons/GiftBox.vue';
 import Button from '@/components/ui/button/Button.vue';
@@ -10,26 +10,16 @@ import CardDescription from '@/components/ui/card/CardDescription.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
 
-const features = [
-    {
-        title: 'Love 2FA',
-        description: 'Send anonymous gifts and let your lover guess who the secret admirer is. Keep the mystery alive!',
-        icon: 'lock',
-        gradient: 'from-red-500 to-pink-500',
-        link: '/love-2fa'
-    },
-    {
-        title: 'Be My Valentine',
-        description: 'Ask your crush to be your Valentine in the most romantic way possible. Make this day unforgettable!',
-        icon: 'heart',
-        gradient: 'from-pink-500 to-rose-500',
-        link: '/be-my-valentine'
-    }
-];
 
 const navigateTo = (url: string) => {
     console.log(`Navigating to ${url}`);
     router.visit(url);
+};
+
+const form = useForm({});
+
+const submit = () => {
+    form.post('/logout');
 };
 
 
@@ -38,20 +28,25 @@ const navigateTo = (url: string) => {
 <template>
     <div class="min-h-screen relative overflow-hidden">
         <!-- Background Image with Overlay -->
-        <div
-            class="fixed inset-0 z-0"
-            style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"
-        >
-            <div class="absolute inset-0 bg-gradient-to-br from-red-900/40 via-rose-800/30 to-pink-900/40 backdrop-blur-[2px]"></div>
+        <div class="fixed inset-0 z-0"
+            style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div
+                class="absolute inset-0 bg-linear-to-br from-red-900/40 via-rose-800/30 to-pink-900/40 backdrop-blur-[2px]">
+            </div>
         </div>
 
         <!-- Content -->
         <div class="relative z-10 container mx-auto px-4 py-12 md:py-20">
             <!-- Hero Section -->
             <div class="text-center mb-16 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-4">
-                    <Sparkles class="w-4 h-4 text-pink-200" />
-                    <span class="text-sm text-white font-medium">Valentine's Day 2026</span>
+                <div class="flex justify-center items-baseline gap-2">
+                    <div
+                        class="inline-flex  items-baseline gap-2 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-4">
+                        <Sparkles class="w-4 h-4 text-pink-200" />
+                        <span class="text-sm text-white font-medium">Valentine's Day 2026</span>
+                    </div>
+                    <Button class="rounded-full" size="lg" variant="outline" @click="submit">Logout</Button>
+
                 </div>
 
                 <h1 class="text-5xl md:text-7xl font-bold text-white drop-shadow-2xl">
@@ -66,8 +61,9 @@ const navigateTo = (url: string) => {
             <!-- Feature Cards -->
             <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
                 <!-- Love 2FA Card -->
-                <Card class="group hover:scale-105 transition-all duration-500 bg-white/95 backdrop-blur-xl border-2 border-white/50 shadow-2xl hover:shadow-pink-500/20 overflow-hidden flex flex-col">
-                    <CardHeader class="px-8 pt-10 pb-4 text-center relative flex-grow">
+                <Card
+                    class="group hover:scale-105 transition-all duration-500 bg-white/80 backdrop-blur-xl border-2 border-white/50 shadow-2xl hover:shadow-pink-500/20 overflow-hidden flex flex-col">
+                    <CardHeader class="px-8 pb-4 text-center relative flex-grow">
                         <!-- SVG Illustration -->
                         <div class="mb-6 flex justify-center">
                             <div class="relative">
@@ -82,11 +78,10 @@ const navigateTo = (url: string) => {
                         </CardDescription>
                     </CardHeader>
 
-                    <CardContent class="px-8 pb-3">
+                    <CardContent class="px-6">
                         <Button
-                            class="w-full bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-semibold py-6 text-lg shadow-lg hover:shadow-xl transition-all"
-                            @click="() => navigateTo('/love-2fa')"
-                        >
+                            class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-semibold py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+                            @click="() => navigateTo('/love-2fa')">
                             <Lock class="w-5 h-5 mr-2" />
                             Create Mystery Gift
                         </Button>
@@ -94,8 +89,9 @@ const navigateTo = (url: string) => {
                 </Card>
 
                 <!-- Be My Valentine Card -->
-                <Card class="group hover:scale-105 transition-all duration-500 bg-white/95 backdrop-blur-xl border-2 border-white/50 shadow-2xl hover:shadow-rose-500/20 overflow-hidden flex flex-col">
-                    <CardHeader class="px-8 pt-10 pb-4 text-center relative flex-grow">
+                <Card
+                    class="group hover:scale-105 transition-all duration-500 bg-white/80 backdrop-blur-xl border-2 border-white/50 shadow-2xl hover:shadow-rose-500/20 overflow-hidden flex flex-col">
+                    <CardHeader class="px-8 pb-4 text-center relative flex-grow">
                         <!-- SVG Illustration -->
                         <div class="mb-6 flex justify-center">
                             <div class="relative animate-pulse">
@@ -110,11 +106,10 @@ const navigateTo = (url: string) => {
                         </CardDescription>
                     </CardHeader>
 
-                    <CardContent class="px-8 pb-3">
+                    <CardContent class="px-6">
                         <Button
-                            class="w-full bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-semibold py-6 text-lg shadow-lg hover:shadow-xl transition-all"
-                            @click="() => navigateTo('/be-my-valentine')"
-                        >
+                            class="w-full bg-linear-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-semibold py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+                            @click="() => navigateTo('/be-my-valentine')">
                             <Heart class="w-5 h-5 mr-2 fill-current" />
                             Ask Your Crush
                         </Button>
@@ -147,12 +142,15 @@ const navigateTo = (url: string) => {
         transform: translateY(100vh) scale(0);
         opacity: 0;
     }
+
     10% {
         opacity: 1;
     }
+
     90% {
         opacity: 1;
     }
+
     100% {
         transform: translateY(-100vh) scale(1.5);
         opacity: 0;
@@ -173,6 +171,7 @@ const navigateTo = (url: string) => {
         opacity: 0;
         transform: translateY(1rem);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -183,4 +182,3 @@ const navigateTo = (url: string) => {
     animation: animate-in 0.6s ease-out;
 }
 </style>
-

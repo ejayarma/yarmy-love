@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Valentine extends Model
 {
     protected $fillable = [
-        'token',
-        'author_email',
-        'author_name',
+        'slug',
+        'sender_email',
+        'sender_name',
         'crush_name',
         'message',
         'force_yes',
@@ -22,4 +23,23 @@ class Valentine extends Model
         'force_yes' => 'boolean',
         'responded_at' => 'datetime',
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($valentine) {
+            if (empty($valentine->slug)) {
+                $valentine->slug = Str::random(32);
+            }
+        });
+    }
 }

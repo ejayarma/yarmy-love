@@ -77,10 +77,10 @@
             </p>
         @endif
 
-        @if ($message)
+        @if ($loveMessage)
             <hr style="margin: 30px 0;">
             <p><em>Message:</em></p>
-            <p>{{ $message }}</p>
+            <p>{{ $loveMessage }}</p>
         @endif
 
         <p class="footer">

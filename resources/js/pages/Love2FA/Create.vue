@@ -11,6 +11,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 type Props = {
     generatedLink?: string;
     recipientPincode?: string;
+    senderEmail?: string;
 };
 
 const props = defineProps<Props>();
@@ -20,7 +21,7 @@ const hints = ref<string[]>(['']);
 
 const form = useForm({
     sender_name: '',
-    sender_email: '',
+    sender_email: props.senderEmail || '',
     recipient_name: '',
     recipient_pincode: '',
     gift_description: '',
@@ -62,15 +63,14 @@ const createNew = () => {
 
 <template>
     <AppLayout>
+
         <Head title="Love 2FA - Create Mystery Gift" />
 
         <div class="min-h-screen relative overflow-hidden">
             <!-- Background Image with Overlay -->
-            <div
-                class="fixed inset-0 z-0"
-                style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"
-            >
-                <div class="absolute inset-0 bg-gradient-to-br from-red-900/40 via-rose-800/30 to-pink-900/40"></div>
+            <div class="fixed inset-0 z-0"
+                style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+                <div class="absolute inset-0 bg-linear-to-br from-red-900/40 via-rose-800/30 to-pink-900/40"></div>
             </div>
 
             <!-- Content -->
@@ -112,10 +112,13 @@ const createNew = () => {
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Recipient's PIN Code</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Recipient's PIN
+                                        Code</label>
                                     <div class="bg-pink-50 rounded-lg p-4 border-2 border-pink-200">
-                                        <p class="text-2xl font-bold text-center text-pink-600 tracking-widest">{{ recipientPincode }}</p>
-                                        <p class="text-xs text-center text-gray-600 mt-2">They need this to unlock the mystery</p>
+                                        <p class="text-2xl font-bold text-center text-pink-600 tracking-widest">{{
+                                            recipientPincode }}</p>
+                                        <p class="text-xs text-center text-gray-600 mt-2">They need this to unlock the
+                                            mystery</p>
                                     </div>
                                 </div>
                             </div>
@@ -125,27 +128,23 @@ const createNew = () => {
                                     <Sparkles class="w-5 h-5 text-yellow-600 mr-3 flex-shrink-0" />
                                     <div>
                                         <p class="text-sm text-yellow-800">
-                                            <strong>Important:</strong> Share BOTH the link and PIN code with your recipient.
-                                            They'll need the PIN to unlock the mystery, then they have to guess YOUR NAME!
+                                            <strong>Important:</strong> Share BOTH the link and PIN code with your
+                                            recipient.
+                                            They'll need the PIN to unlock the mystery, then they have to guess YOUR
+                                            NAME!
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="flex gap-3">
-                                <Button
-                                    @click="copyToClipboard"
-                                    class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
-                                >
+                                <Button @click="copyToClipboard"
+                                    class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700">
                                     <Copy v-if="!copied" class="w-4 h-4 mr-2" />
                                     <Check v-else class="w-4 h-4 mr-2" />
                                     {{ copied ? 'Copied!' : 'Copy Link' }}
                                 </Button>
-                                <Button
-                                    @click="createNew"
-                                    variant="outline"
-                                    class="flex-1"
-                                >
+                                <Button @click="createNew" variant="outline" class="flex-1">
                                     Create Another
                                 </Button>
                             </div>
@@ -165,26 +164,16 @@ const createNew = () => {
 
                                     <div class="grid gap-2">
                                         <Label for="sender_name">Your Name <span class="text-red-500">*</span></Label>
-                                        <Input
-                                            id="sender_name"
-                                            v-model="form.sender_name"
-                                            type="text"
-                                            required
-                                            placeholder="Your full name"
-                                        />
+                                        <Input id="sender_name" v-model="form.sender_name" type="text" required
+                                            placeholder="Your full name" />
                                         <p class="text-sm text-gray-600">This is what they need to guess</p>
                                         <InputError :message="form.errors.sender_name" />
                                     </div>
 
                                     <div class="grid gap-2">
                                         <Label for="sender_email">Your Email <span class="text-red-500">*</span></Label>
-                                        <Input
-                                            id="sender_email"
-                                            v-model="form.sender_email"
-                                            type="email"
-                                            required
-                                            placeholder="your@email.com"
-                                        />
+                                        <Input disabled id="sender_email" v-model="form.sender_email" type="email" required
+                                            placeholder="your@email.com" />
                                         <p class="text-sm text-gray-600">We'll notify you when they make guesses</p>
                                         <InputError :message="form.errors.sender_email" />
                                     </div>
@@ -195,28 +184,18 @@ const createNew = () => {
                                     <h3 class="text-lg font-semibold text-gray-900">Recipient Information</h3>
 
                                     <div class="grid gap-2">
-                                        <Label for="recipient_name">Recipient's Name <span class="text-red-500">*</span></Label>
-                                        <Input
-                                            id="recipient_name"
-                                            v-model="form.recipient_name"
-                                            type="text"
-                                            required
-                                            placeholder="Their name"
-                                        />
+                                        <Label for="recipient_name">Recipient's Name <span
+                                                class="text-red-500">*</span></Label>
+                                        <Input id="recipient_name" v-model="form.recipient_name" type="text" required
+                                            placeholder="Their name" />
                                         <InputError :message="form.errors.recipient_name" />
                                     </div>
 
                                     <div class="grid gap-2">
-                                        <Label for="recipient_pincode">Create a 4-Digit PIN <span class="text-red-500">*</span></Label>
-                                        <Input
-                                            id="recipient_pincode"
-                                            v-model="form.recipient_pincode"
-                                            type="text"
-                                            maxlength="4"
-                                            pattern="[0-9]{4}"
-                                            required
-                                            placeholder="1234"
-                                        />
+                                        <Label for="recipient_pincode">Create a 4-Digit PIN <span
+                                                class="text-red-500">*</span></Label>
+                                        <Input id="recipient_pincode" v-model="form.recipient_pincode" type="text"
+                                            maxlength="4" pattern="[0-9]{4}" required placeholder="1234" />
                                         <p class="text-sm text-gray-600">
                                             <Lock class="w-3 h-3 inline mr-1" />
                                             They'll need this PIN to unlock and see the mystery
@@ -230,27 +209,18 @@ const createNew = () => {
                                     <h3 class="text-lg font-semibold text-gray-900">Gift Details</h3>
 
                                     <div class="grid gap-2">
-                                        <Label for="gift_description">Gift Description <span class="text-red-500">*</span></Label>
-                                        <Input
-                                            id="gift_description"
-                                            v-model="form.gift_description"
-                                            type="text"
-                                            required
-                                            placeholder="e.g., A dozen red roses, A handwritten poem, etc."
-                                        />
+                                        <Label for="gift_description">Gift Description <span
+                                                class="text-red-500">*</span></Label>
+                                        <Input id="gift_description" v-model="form.gift_description" type="text"
+                                            required placeholder="e.g., A dozen red roses, A handwritten poem, etc." />
                                         <InputError :message="form.errors.gift_description" />
                                     </div>
 
                                     <div class="grid gap-2">
                                         <Label for="message">Your Message <span class="text-red-500">*</span></Label>
-                                        <textarea
-                                            id="message"
-                                            v-model="form.message"
-                                            rows="4"
-                                            required
+                                        <textarea id="message" v-model="form.message" rows="4" required
                                             placeholder="Write a sweet message for your mystery gift..."
-                                            class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                        ></textarea>
+                                            class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"></textarea>
                                         <InputError :message="form.errors.message" />
                                     </div>
                                 </div>
@@ -259,31 +229,17 @@ const createNew = () => {
                                 <div class="space-y-4 pt-4 border-t">
                                     <div class="flex items-center justify-between">
                                         <h3 class="text-lg font-semibold text-gray-900">Hints (Optional)</h3>
-                                        <Button
-                                            type="button"
-                                            @click="addHint"
-                                            variant="outline"
-                                            size="sm"
-                                            :disabled="hints.length >= 5"
-                                        >
+                                        <Button type="button" @click="addHint" variant="outline" size="sm"
+                                            :disabled="hints.length >= 5">
                                             <Plus class="w-4 h-4 mr-1" />
                                             Add Hint
                                         </Button>
                                     </div>
 
                                     <div v-for="(hint, index) in hints" :key="index" class="flex gap-2">
-                                        <Input
-                                            v-model="hints[index]"
-                                            type="text"
-                                            :placeholder="`Hint ${index + 1}`"
-                                            class="flex-1"
-                                        />
-                                        <Button
-                                            type="button"
-                                            @click="removeHint(index)"
-                                            variant="ghost"
-                                            size="icon"
-                                        >
+                                        <Input v-model="hints[index]" type="text" :placeholder="`Hint ${index + 1}`"
+                                            class="flex-1" />
+                                        <Button type="button" @click="removeHint(index)" variant="ghost" size="icon">
                                             <X class="w-4 h-4" />
                                         </Button>
                                     </div>
@@ -294,11 +250,8 @@ const createNew = () => {
                                 <div class="space-y-4 pt-4 border-t">
                                     <div class="grid gap-2">
                                         <Label for="max_attempts">Maximum Guessing Attempts</Label>
-                                        <select
-                                            id="max_attempts"
-                                            v-model="form.max_attempts"
-                                            class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                        >
+                                        <select id="max_attempts" v-model="form.max_attempts"
+                                            class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                                             <option :value="3">3 attempts</option>
                                             <option :value="5">5 attempts</option>
                                             <option :value="7">7 attempts</option>
@@ -308,11 +261,9 @@ const createNew = () => {
                                     </div>
                                 </div>
 
-                                <Button
-                                    type="submit"
+                                <Button type="submit"
                                     class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-6 text-lg"
-                                    :disabled="form.processing"
-                                >
+                                    :disabled="form.processing">
                                     <Gift class="w-5 h-5 mr-2" />
                                     Create Mystery Gift
                                 </Button>
@@ -323,7 +274,8 @@ const createNew = () => {
 
                 <!-- Info Section -->
                 <div class="mt-8 text-center">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
                         <Heart class="w-4 h-4 text-pink-200 fill-current" />
                         <span class="text-sm text-white">Your secret is safe with us 💕</span>
                     </div>

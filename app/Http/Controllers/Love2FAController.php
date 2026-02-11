@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Love2FA;
-use App\Models\Love2FAAttempt;
-use App\Mail\Love2FACreatedMail;
 use App\Mail\Love2FAAttemptMail;
+use App\Mail\Love2FACreatedMail;
+use App\Models\Love2FA;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class Love2FAController extends Controller
@@ -19,7 +18,9 @@ class Love2FAController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Love2FA/Create');
+        return Inertia::render('Love2FA/Create', [
+            'senderEmail' => Session::get('authenticated_email'),
+        ]);
     }
 
     /**
@@ -39,6 +40,8 @@ class Love2FAController extends Controller
             'hints.*' => 'string|max:255',
         ]);
 
+        $validated['sender_email'] = session('authenticated_email');
+
         $love2fa = Love2FA::create([
             'sender_name' => $validated['sender_name'],
             'sender_email' => $validated['sender_email'],
@@ -55,19 +58,20 @@ class Love2FAController extends Controller
         Log::info("New Love2FA created with slug: {$love2fa->slug} by {$validated['sender_email']}");
 
         // Send email to sender
-        defer(function () use ($love2fa, $shareableLink) {
+        defer(function () use ($love2fa) {
             try {
                 Mail::to($love2fa->sender_email)->send(
                     new Love2FACreatedMail($love2fa)
                 );
             } catch (\Exception $e) {
-                Log::error('Failed to send Love2FA creation email: ' . $e->getMessage());
+                Log::error('Failed to send Love2FA creation email: '.$e->getMessage());
             }
         });
 
         return Inertia::render('Love2FA/Create', [
             'generatedLink' => $shareableLink,
             'recipientPincode' => $validated['recipient_pincode'],
+            'senderEmail' => Session::get('authenticated_email'),
         ]);
     }
 
@@ -77,7 +81,7 @@ class Love2FAController extends Controller
     public function show(Love2FA $love2fa)
     {
         // If not unlocked yet, show PIN entry screen
-        if (!$love2fa->is_unlocked && !session()->has("love2fa_{$love2fa->id}_unlocked")) {
+        if (! $love2fa->is_unlocked && ! session()->has("love2fa_{$love2fa->id}_unlocked")) {
             return Inertia::render('Love2FA/Unlock', [
                 'love2fa' => $love2fa->toPublicArray(),
             ]);
@@ -90,7 +94,7 @@ class Love2FAController extends Controller
                 'attempts' => $love2fa->attempts()
                     ->orderBy('created_at', 'desc')
                     ->get()
-                    ->map(fn($attempt) => [
+                    ->map(fn ($attempt) => [
                         'id' => $attempt->id,
                         'guessed_name' => $attempt->guessed_name,
                         'is_correct' => $attempt->is_correct,
@@ -105,7 +109,7 @@ class Love2FAController extends Controller
             'attempts' => $love2fa->attempts()
                 ->orderBy('created_at', 'desc')
                 ->get()
-                ->map(fn($attempt) => [
+                ->map(fn ($attempt) => [
                     'id' => $attempt->id,
                     'guessed_name' => $attempt->masked_name,
                     'is_correct' => $attempt->is_correct,
@@ -123,7 +127,7 @@ class Love2FAController extends Controller
             'pincode' => ['required', 'string', 'size:4'],
         ]);
 
-        if (!$love2fa->verifyPincode($request->input('pincode'))) {
+        if (! $love2fa->verifyPincode($request->input('pincode'))) {
             return back()->with('error', 'Incorrect PIN code. Please try again.');
         }
 
@@ -148,7 +152,7 @@ class Love2FAController extends Controller
         ]);
 
         // Check if unlocked
-        if (!$love2fa->is_unlocked && !session()->has("love2fa_{$love2fa->id}_unlocked")) {
+        if (! $love2fa->is_unlocked && ! session()->has("love2fa_{$love2fa->id}_unlocked")) {
             return redirect()->route('love2fa.show', $love2fa)
                 ->with('error', 'Please enter the PIN code first!');
         }
@@ -160,7 +164,7 @@ class Love2FAController extends Controller
         }
 
         // Check if attempts remaining
-        if (!$love2fa->hasAttemptsRemaining()) {
+        if (! $love2fa->hasAttemptsRemaining()) {
             return back()->with('error', 'No attempts remaining. The mystery stays unsolved! 😢');
         }
 
@@ -178,7 +182,7 @@ class Love2FAController extends Controller
                     new Love2FAAttemptMail($love2fa, $attempt)
                 );
             } catch (\Exception $e) {
-                Log::error('Failed to send Love2FA attempt email: ' . $e->getMessage());
+                Log::error('Failed to send Love2FA attempt email: '.$e->getMessage());
             }
         });
 
@@ -204,7 +208,7 @@ class Love2FAController extends Controller
     public function viewHints(Love2FA $love2fa)
     {
         // Check if unlocked
-        if (!$love2fa->is_unlocked && !session()->has("love2fa_{$love2fa->id}_unlocked")) {
+        if (! $love2fa->is_unlocked && ! session()->has("love2fa_{$love2fa->id}_unlocked")) {
             return redirect()->route('love2fa.show', $love2fa);
         }
 
