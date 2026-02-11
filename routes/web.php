@@ -10,7 +10,7 @@ use Inertia\Inertia;
 // Authentication Routes
 Route::middleware('guest')->group(function () {
     // Login page (email entry)
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('5rottle:10,1');
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('throttle:5,1');
 
     // Send OTP to email
     Route::post('/auth/send-otp', [AuthController::class, 'sendOtp'])->name('auth.send-otp')->middleware('throttle:5,1');

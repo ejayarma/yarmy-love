@@ -51,7 +51,8 @@ const submit = () => {
                         <Sparkles class="w-4 h-4 text-pink-200" />
                         <span class="text-sm text-white font-medium">Valentine's Day 2026</span>
                     </div>
-                    <Button v-if="props.senderEmail" class="rounded-full" size="lg" variant="outline" @click="submit">Logout</Button>
+                    <Button v-if="props.senderEmail" class="rounded-full" size="lg" variant="outline"
+                        @click="submit">Logout</Button>
 
                 </div>
 
@@ -66,33 +67,6 @@ const submit = () => {
 
             <!-- Feature Cards -->
             <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
-                <!-- Love 2FA Card -->
-                <Card
-                    class="group hover:scale-105 transition-all duration-500 bg-white/80 backdrop-blur-xl border-2 border-white/50 shadow-2xl hover:shadow-pink-500/20 overflow-hidden flex flex-col">
-                    <CardHeader class="px-8 pb-4 text-center relative flex-grow">
-                        <!-- SVG Illustration -->
-                        <div class="mb-6 flex justify-center">
-                            <div class="relative">
-                                <GiftBox />
-                            </div>
-                        </div>
-
-                        <CardTitle class="text-2xl font-bold text-gray-900">Love 2FA</CardTitle>
-                        <CardDescription class="text-base text-gray-600 mt-2 min-h-[3rem]">
-                            Send anonymous gifts and let your lover guess who the secret admirer is.
-                            <span class="hidden xl:inline">Keep the mystery alive!</span>
-                        </CardDescription>
-                    </CardHeader>
-
-                    <CardContent class="px-6">
-                        <Button
-                            class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-semibold py-6 text-lg shadow-lg hover:shadow-xl transition-all"
-                            @click="() => navigateTo('/love-2fa')">
-                            <Lock class="w-5 h-5 mr-2" />
-                            Create Mystery Gift
-                        </Button>
-                    </CardContent>
-                </Card>
 
                 <!-- Be My Valentine Card -->
                 <Card
@@ -121,6 +95,34 @@ const submit = () => {
                         </Button>
                     </CardContent>
                 </Card>
+
+                <!-- Love 2FA Card -->
+                <Card
+                    class="group hover:scale-105 transition-all duration-500 bg-white/80 backdrop-blur-xl border-2 border-white/50 shadow-2xl hover:shadow-pink-500/20 overflow-hidden flex flex-col">
+                    <CardHeader class="px-8 pb-4 text-center relative flex-grow">
+                        <!-- SVG Illustration -->
+                        <div class="mb-6 flex justify-center">
+                            <div class="relative">
+                                <GiftBox />
+                            </div>
+                        </div>
+
+                        <CardTitle class="text-2xl font-bold text-gray-900">Love 2FA</CardTitle>
+                        <CardDescription class="text-base text-gray-600 mt-2 min-h-[3rem]">
+                            Send anonymous gifts and let your lover guess who the secret admirer is.
+                            <span class="hidden xl:inline">Keep the mystery alive!</span>
+                        </CardDescription>
+                    </CardHeader>
+
+                    <CardContent class="px-6">
+                        <Button
+                            class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-semibold py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+                            @click="() => navigateTo('/love-2fa')">
+                            <Lock class="w-5 h-5 mr-2" />
+                            Create Mystery Gift
+                        </Button>
+                    </CardContent>
+                </Card>
             </div>
 
             <!-- Footer CTA -->
@@ -130,11 +132,13 @@ const submit = () => {
                 </p>
             </div>
             <div class="my-8 text-center">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                        <Heart class="w-4 h-4 text-pink-200 fill-current" />
-                        <span class="text-sm text-white">Made with love by <a class="font-medium" target="_blank" href="http://yarmy.tech">Yarmy Tech</a> 💕</span>
-                    </div>
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                    <Heart class="w-4 h-4 text-pink-200 fill-current" />
+                    <span class="text-sm text-white">Made with love by <a class="font-medium" target="_blank"
+                            href="http://yarmy.tech">Yarmy Tech</a> 💕</span>
                 </div>
+            </div>
         </div>
 
         <!-- Floating Hearts Animation -->
