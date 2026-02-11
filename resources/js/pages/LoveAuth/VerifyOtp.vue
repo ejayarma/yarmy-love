@@ -23,10 +23,12 @@ const resendForm = useForm({
 });
 
 const canResend = ref(false);
-const countdown = ref(60);
+const countdown = ref(5);
 
 const submit = () => {
-    form.post('/auth/verify-otp');
+    form.post('/auth/verify-otp', {
+        preserveScroll: true,
+    });
 };
 
 const resendOtp = () => {

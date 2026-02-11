@@ -23,6 +23,18 @@ class AuthController extends Controller
     }
 
     /**
+     * Show the login form (email entry)
+     */
+    public function showVerify(Request $request)
+    {
+        $email = Session::get('otp_email') ?: $request->input('email');
+
+        return Inertia::render('LoveAuth/VerifyOtp', [
+            'email' => $email,
+        ]);
+    }
+
+    /**
      * Send OTP to email
      */
     public function sendOtp(Request $request)
@@ -62,7 +74,7 @@ class AuthController extends Controller
 
         // Verify OTP
         if (! Otp::verify($validated['email'], $validated['otp'], 'login')) {
-            return back()->with('error', 'Invalid or expired code. Please try again.');
+            return redirect()->route('auth.show-verify-otp')->with('error', 'Invalid or expired code. Please try again.');
         }
 
         // Log the user in (store email in session)

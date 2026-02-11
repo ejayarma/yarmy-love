@@ -13,12 +13,15 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('throttle:10,1');
 
     // Send OTP to email
+    Route::get('/auth/send-otp', [AuthController::class, 'showLogin'])->name('auth.show-send-otp')->middleware('throttle:10,1');
     Route::post('/auth/send-otp', [AuthController::class, 'sendOtp'])->name('auth.send-otp')->middleware('throttle:10,1');
 
     // Verify OTP page
+    Route::get('/auth/verify-otp', [AuthController::class, 'showVerify'])->name('auth.show-verify-otp')->middleware('throttle:10,1');
     Route::post('/auth/verify-otp', [AuthController::class, 'verifyOtp'])->name('auth.verify-otp')->middleware('throttle:10,1');
 
     // Resend OTP
+    Route::get('/auth/resend-otp', [AuthController::class, 'showVerify'])->name('auth.show-resend-otp')->middleware('throttle:10,1');
     Route::post('/auth/resend-otp', [AuthController::class, 'resendOtp'])->name('auth.resend-otp')->middleware('throttle:10,1');
 });
 
