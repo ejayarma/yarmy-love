@@ -135,7 +135,7 @@ const createNew = () => {
                             <div class="flex gap-3">
                                 <Button
                                     @click="copyToClipboard"
-                                    class="flex-1 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
+                                    class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
                                 >
                                     <Copy v-if="!copied" class="w-4 h-4 mr-2" />
                                     <Check v-else class="w-4 h-4 mr-2" />
@@ -310,7 +310,7 @@ const createNew = () => {
 
                                 <Button
                                     type="submit"
-                                    class="w-full bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-6 text-lg"
+                                    class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-6 text-lg"
                                     :disabled="form.processing"
                                 >
                                     <Gift class="w-5 h-5 mr-2" />

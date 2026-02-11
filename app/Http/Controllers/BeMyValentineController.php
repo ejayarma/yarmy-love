@@ -146,10 +146,21 @@ class BeMyValentineController extends Controller
     //     ]);
     // }
 
-    public function show(Valentine $valentine)
+    public function show(string $token)
     {
-        return Inertia::render('BeMyValentine/View', [
-            'valentine' => [
+        $valentine = Valentine::where('token', $token)
+            ->firstOrFail();
+
+        // dd($valentine, [
+        //         'token' => $valentine->token,
+        //         'requiresPincode' => ! is_null($valentine->pincode),
+        //         'authorName' => $valentine->author_name,
+        //         'crushName' => $valentine->crush_name,
+        //         'message' => $valentine->message,
+        //         'forceYes' => $valentine->force_yes,
+        //     ]);
+
+        return Inertia::render('BeMyValentine/View',[
                 'token' => $valentine->token,
                 'requiresPincode' => ! is_null($valentine->pincode),
                 'authorName' => $valentine->author_name,
@@ -157,7 +168,7 @@ class BeMyValentineController extends Controller
                 'message' => $valentine->message,
                 'forceYes' => $valentine->force_yes,
             ],
-        ]);
+       );
     }
 
     public function verify(Request $request, Valentine $valentine)

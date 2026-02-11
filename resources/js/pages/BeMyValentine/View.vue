@@ -20,6 +20,10 @@ const responseForm = useForm({
 const props = defineProps<{
     token: string
     requiresPincode: boolean
+    forceYes: boolean
+    crushName: string
+    authorName: string
+    message: string
 }>()
 
 const loading = ref(false)
@@ -33,6 +37,14 @@ const data = ref<{
     message: string
     forceYes: boolean
 } | null>(null)
+
+const verifyPin = () => {
+    pinForm.post(BeMyValentineController.verify.url(props.token), {
+        onSuccess: () => {
+            revealed.value = true
+        },
+    })
+}
 
 const reveal = async () => {
     loading.value = true
@@ -81,82 +93,102 @@ const dodgeNo = (e: MouseEvent) => {
 
         <div class="min-h-screen flex items-center justify-center px-4">
             <div class="w-full max-w-xl relative rounded-2xl overflow-hidden shadow-2xl">
-                <div class="absolute inset-0 bg-card/95 backdrop-blur-xl border border-border"></div>
 
-                <div class="relative p-8 text-center space-y-6">
+                <div class="fixed inset-0 z-0"
+                    style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-red-900/40 via-rose-800/30 to-pink-900/40">
+                    </div>
+                </div>
+
+                <div class="relative z-10 p-8 text-center space-y-6">
+                    <div class="absolute inset-0 h-full bg-white/95 backdrop-blur-xl border-2 border-white/50"></div>
+
                     <!-- PIN GATE -->
-                    <template v-if="!revealed && requiresPincode">
-                        <div class="flex justify-center">
-                            <Lock class="w-12 h-12 text-primary" />
-                        </div>
-                        <h1 class="text-2xl font-bold">Enter PIN to View 💌</h1>
+                    <div class="relative z-20 space-y-5">
+                        <template v-if="!revealed && requiresPincode">
+                            <div class="flex justify-center">
+                                <Lock class="w-12 h-12 text-primary" />
+                            </div>
+                            <h1 class="text-2xl font-bold">Enter PIN to View 💌</h1>
 
-                        <Input v-model="pincode" maxlength="4" placeholder="4-digit PIN"
-                            class="text-center tracking-widest" />
+                            <Input autofocus v-model="pincode" maxlength="4" placeholder="4-digit PIN"
+                                class="text-center tracking-widest" />
 
-                        <p v-if="error" class="text-sm text-destructive">{{ error }}</p>
+                            <p v-if="error" class="text-sm text-destructive">{{ error }}</p>
 
-                        <!-- <Button @click="reveal" :disabled="loading" class="w-full">
-                            <Spinner v-if="loading" class="mr-2" />
-                            Unlock Message
-                        </Button> -->
-                        <Button @click="pinForm.post(BeMyValentineController.verify.url(token))"
-                            :disabled="pinForm.processing">
-                            Unlock Message
-                        </Button>
-
-                        <p v-if="pinForm.errors.pincode" class="text-destructive">
-                            {{ pinForm.errors.pincode }}
-                        </p>
-
-                    </template>
-
-                    <!-- MESSAGE VIEW -->
-                    <template v-else-if="revealed && data">
-                        <div class="flex justify-center">
-                            <Heart class="w-14 h-14 text-primary fill-current animate-pulse" />
-                        </div>
-
-                        <h1 class="text-3xl font-bold">
-                            {{ data.crushName }}, will you be my Valentine? 💕
-                        </h1>
-
-                        <p class="text-lg text-muted-foreground">
-                            From <strong>{{ data.authorName }}</strong>
-                        </p>
-
-                        <div class="bg-secondary rounded-xl p-6 text-left">
-                            <p class="whitespace-pre-line">{{ data.message }}</p>
-                        </div>
-
-                        <div class="flex justify-center gap-4 pt-4 relative">
-                            <!-- <Button class="px-10" @click="respond('yes')">
-                                Yes 💖
-                            </Button>
-
-                            <Button variant="outline" class="px-10 transition-transform" @click="respond('no')"
-                                @mouseenter="data.forceYes ? dodgeNo : null">
-                                No 💔
-                            </Button> -->
                             <Button
+                                class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
+                                @click="verifyPin"
+                                :disabled="pinForm.processing">
+                                Unlock Message
+                            </Button>
+
+                            <p v-if="pinForm.errors.pincode" class="text-destructive">
+                                {{ pinForm.errors.pincode }}
+                            </p>
+
+                        </template>
+
+                        <!-- MESSAGE VIEW -->
+                        <template v-else-if="revealed && data">
+                            <div class="flex justify-center">
+                                <Heart class="w-14 h-14 text-primary fill-current animate-pulse" />
+                            </div>
+
+                            <h1 class="text-3xl font-bold">
+                                {{ props?.crushName }}, will you be my Valentine? 💕
+                            </h1>
+
+                            <p class="text-lg text-muted-foreground">
+                                From <strong>{{ props?.authorName }}</strong>
+                            </p>
+
+                            <div class="bg-secondary rounded-xl p-6 text-left">
+                                <p class="whitespace-pre-line">{{ props?.message }}</p>
+                            </div>
+
+                            <!-- <div class="flex justify-center gap-4 pt-4 relative">
+                                <Button
+                                    class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
+                                    @click="responseForm.post(BeMyValentineController.respond.url(token))">
+                                    Yes 💖
+                                </Button>
+
+                                <Button
+                                    class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
+                                    variant="outline" @mouseenter="props.forceYes ? dodgeNo : null"
+                                    @click="responseForm.post(BeMyValentineController.respond.url(token))">
+                                    No 💔
+                                </Button>
+                            </div> -->
+
+                            <!-- Yes button -->
+                            <Button
+                                class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
                                 @click="responseForm.post(BeMyValentineController.respond.url(token))">
                                 Yes 💖
                             </Button>
 
-                            <Button variant="outline" @mouseenter="forceYes ? dodgeNo : null"
+                            <!-- "No" button – but not really -->
+                            <Button
+                                class="flex-1 bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
+                                variant="outline" @mouseenter="props.forceYes ? dodgeNo : null"
                                 @click="responseForm.post(BeMyValentineController.respond.url(token))">
                                 No 💔
                             </Button>
 
+                        </template>
+                        <!-- NO PIN REQUIRED -->
+                        <div>
+                            <Button
+                                class="flex-1 w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
+                                @click="reveal">
+                                View Valentine
+                                <Heart class="w-5 h-5 ml-2 fill-current" />
+                            </Button>
                         </div>
-                    </template>
+                    </div>
 
-                    <!-- NO PIN REQUIRED -->
-                    <!-- <template v-else>
-                        <Button @click="reveal" class="w-full">
-                            View Valentine 💘
-                        </Button>
-                    </template> -->
                 </div>
             </div>
         </div>
