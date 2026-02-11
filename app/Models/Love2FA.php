@@ -114,7 +114,11 @@ class Love2FA extends Model
      */
     public function verifyName(string $guessedName): bool
     {
-        return strtolower(trim($guessedName)) === strtolower(trim($this->sender_name));
+        $needle = strtolower(trim($guessedName));
+        $haystack = strtolower(trim($this->sender_name));
+
+        return ! empty($needle) && $needle === $haystack
+        || ! empty($needle) && Str::contains($haystack, $needle);
     }
 
     /**
@@ -122,7 +126,7 @@ class Love2FA extends Model
      */
     public function unlock(): void
     {
-        if (!$this->is_unlocked) {
+        if (! $this->is_unlocked) {
             $this->update([
                 'is_unlocked' => true,
                 'unlocked_at' => now(),
