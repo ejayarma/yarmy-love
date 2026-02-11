@@ -100,7 +100,7 @@ const submit = () => {
                 <div class="my-8 text-center">
                     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
                         <Heart class="w-4 h-4 text-pink-200 fill-current" />
-                        <span class="text-sm text-white">Made with love by<a class="font-medium" target="_blank" href="http://yarmy.tech">Yarmy Tech</a> 💕</span>
+                        <span class="text-sm text-white">Made with love by <a class="font-medium" target="_blank" href="http://yarmy.tech">Yarmy Tech</a> 💕</span>
                     </div>
                 </div>
             </div>

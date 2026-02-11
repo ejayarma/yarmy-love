@@ -232,7 +232,7 @@ const createNew = () => {
                 </div>
 
                 <!-- Info Section -->
-                <div class="mt-8 text-center">
+                <div class="my-8 text-center">
                     <div
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
                         <Heart class="w-4 h-4 text-pink-200 fill-current" />

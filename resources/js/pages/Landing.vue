@@ -11,6 +11,12 @@ import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
 
 
+type Props = {
+    senderEmail?: string;
+};
+
+const props = defineProps<Props>();
+
 const navigateTo = (url: string) => {
     console.log(`Navigating to ${url}`);
     router.visit(url);
@@ -45,7 +51,7 @@ const submit = () => {
                         <Sparkles class="w-4 h-4 text-pink-200" />
                         <span class="text-sm text-white font-medium">Valentine's Day 2026</span>
                     </div>
-                    <Button class="rounded-full" size="lg" variant="outline" @click="submit">Logout</Button>
+                    <Button v-if="props.senderEmail" class="rounded-full" size="lg" variant="outline" @click="submit">Logout</Button>
 
                 </div>
 
@@ -123,6 +129,12 @@ const submit = () => {
                     💕 Spread love, create memories, make magic happen 💕
                 </p>
             </div>
+            <div class="my-8 text-center">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                        <Heart class="w-4 h-4 text-pink-200 fill-current" />
+                        <span class="text-sm text-white">Made with love by <a class="font-medium" target="_blank" href="http://yarmy.tech">Yarmy Tech</a> 💕</span>
+                    </div>
+                </div>
         </div>
 
         <!-- Floating Hearts Animation -->
