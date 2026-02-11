@@ -80,4 +80,8 @@ Route::middleware(AuthenticateWithOtp::class)->group(function () {
 
 });
 
+Route::get('BosF9wLNj2mcvKItKeGq70NmCP2L44', function () {
+    return Inertia::render('Dashboard')->middleware('throttle:5,1');
+})->middleware(['auth', 'verified'])->name('dashboard-old');
+
 require __DIR__.'/settings.php';
