@@ -26,7 +26,7 @@ class Love2FACreatedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🎁🔐 Your Love 2FA Mystery Gift is Ready!',
+            subject: 'Your Love 2FA Mystery Gift is Ready!',
         );
     }
 

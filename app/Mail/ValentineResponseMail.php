@@ -29,8 +29,8 @@ class ValentineResponseMail extends Mailable
     {
         $subject = match ($this->response) {
             'yes' => '🎉 They Said YES to Your Valentine Request!',
-            'no' => '💌 Response to Your Valentine Request',
-            default => '📬 Valentine Response Received',
+            'no' => 'Response to Your Valentine Request',
+            default => 'Valentine Response Received',
         };
 
         return new Envelope(

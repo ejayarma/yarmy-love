@@ -29,7 +29,7 @@ class Love2FAAttemptMail extends Mailable
     {
         $subject = $this->attempt->is_correct
             ? '🎉 Mystery Solved! They Guessed Your Name!'
-            : '🔍 New Guess Attempt on Your Love 2FA';
+            : 'New Guess Attempt on Your Love 2FA';
 
         return new Envelope(
             subject: $subject,

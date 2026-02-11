@@ -26,7 +26,7 @@ class ValentineCreatedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '💝 Your Valentine Request is Ready!',
+            subject: 'Your Valentine Request is Ready!',
         );
     }
 
