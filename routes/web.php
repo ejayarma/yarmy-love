@@ -63,11 +63,11 @@ Route::prefix('gift')->group(function () {
 // Be My Valentine Routes
 Route::prefix('be-my-valentine')->group(function () {
     Route::get('/', [BeMyValentineController::class, 'create'])
-        ->name('valentine.create')->middleware('throttle:10,1');
+        ->name('valentine.create')->middleware('throttle:10,1', AuthenticateWithOtp::class);
 
     Route::post('/', [BeMyValentineController::class, 'store'])
-        ->name('valentine.store')->middleware('throttle:10,1');
-})->middleware(AuthenticateWithOtp::class);
+        ->name('valentine.store')->middleware('throttle:10,1', AuthenticateWithOtp::class);
+});
 
 Route::prefix('valentine')->group(function () {
     Route::get('/{valentine:slug}', [BeMyValentineController::class, 'show'])

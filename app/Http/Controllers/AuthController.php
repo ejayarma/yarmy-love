@@ -39,8 +39,13 @@ class AuthController extends Controller
      */
     public function sendOtp(Request $request)
     {
+
         $validated = $request->validate([
             'email' => 'required|email:dns',
+            'consent' => 'accepted',
+        ], [
+            'consent.required' => 'The consent checkbox is required',
+            'consent.in' => 'The consent checkbox is required',
         ]);
 
         try {

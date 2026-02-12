@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
-import { Heart, Mail } from 'lucide-vue-next';
+import { Heart, Lock, Mail } from 'lucide-vue-next';
+import { ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
+import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+const consentToEmail = ref(false);
+
+
 const form = useForm({
     email: '',
+    consent: false,
 });
 
+
 const submit = () => {
+    form.consent = consentToEmail.value;
     form.post('/auth/send-otp');
 };
 </script>
@@ -63,11 +71,25 @@ const submit = () => {
                                 <Label for="email">Email Address</Label>
                                 <Input id="email" v-model="form.email" type="email" required
                                     placeholder="your@email.com" class="text-lg" autofocus />
-                                <p class="text-sm text-gray-600">
+                                <!-- <p class="text-sm text-gray-600">
                                     Use the same email you used to create Valentine requests
-                                </p>
+                                </p> -->
                                 <InputError :message="form.errors.email" />
                             </div>
+
+                            <div class="grid gap-2">
+                                <div class="flex gap-2">
+                                    <Checkbox id="consent" class="inline" v-model="consentToEmail"
+                                        v-bind:name="'true'" />
+                                    <Label for="consent" class="inline leading-4.5">
+                                        I agree to receiving emails from Yarmy Tech for this application. Read our
+                                        <b><a href="https://yarmy.tech/privacy-policy" target="_blank">Privacy
+                                                Policy</a></b>
+                                    </Label>
+                                </div>
+                                <InputError :message="form.errors.consent" />
+                            </div>
+
 
                             <Button type="submit"
                                 class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-6 text-lg"
