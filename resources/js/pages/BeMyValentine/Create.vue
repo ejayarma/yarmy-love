@@ -189,7 +189,7 @@ const createNew = () => {
                                     <div class="space-y-3">
                                         <!-- Force Yes -->
                                         <div class="flex items-center space-x-2 p-3 rounded-lg bg-pink-50">
-                                            <Checkbox id="force_yes" v-model:checked="forceYes" />
+                                            <Checkbox id="force_yes" v-model="forceYes" v-bind:name="'true'" />
                                             <Label for="force_yes" class="text-sm font-medium cursor-pointer flex-1">
                                                 <Sparkles class="w-4 h-4 inline mr-1" />
                                                 Make the "No" button run away (playful mode)
