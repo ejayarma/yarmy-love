@@ -118,7 +118,7 @@ class Love2FA extends Model
         $haystack = strtolower(trim($this->sender_name));
 
         return ! empty($needle) && $needle === $haystack
-        || ! empty($needle) && Str::contains($haystack, $needle);
+        || ! empty($needle) && in_array($needle, explode(' ', $haystack));
     }
 
     /**
