@@ -23,7 +23,7 @@ const resendForm = useForm({
 });
 
 const canResend = ref(false);
-const countdown = ref(5);
+const countdown = ref(60);
 
 const submit = () => {
     form.post('/auth/verify-otp', {
@@ -62,14 +62,13 @@ onMounted(() => {
 </script>
 
 <template>
+
     <Head title="Enter Verification Code" />
 
     <div class="min-h-screen relative overflow-hidden">
         <!-- Background Image with Overlay -->
-        <div
-            class="fixed inset-0 z-0"
-            style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"
-        >
+        <div class="fixed inset-0 z-0"
+            style="background-image: url('/rose-petals.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="absolute inset-0 bg-linear-to-br from-red-900/40 via-rose-800/30 to-pink-900/40"></div>
         </div>
 
@@ -108,26 +107,15 @@ onMounted(() => {
                         <form @submit.prevent="submit" class="space-y-6">
                             <div class="grid gap-2">
                                 <Label for="otp">Verification Code</Label>
-                                <Input
-                                    id="otp"
-                                    v-model="form.otp"
-                                    type="text"
-                                    inputmode="numeric"
-                                    maxlength="6"
-                                    pattern="[0-9]{6}"
-                                    required
-                                    placeholder="000000"
-                                    class="text-center text-3xl tracking-widest font-mono"
-                                    autofocus
-                                />
+                                <Input id="otp" v-model="form.otp" type="text" inputmode="numeric" maxlength="6"
+                                    pattern="[0-9]{6}" required placeholder="000000"
+                                    class="text-center text-3xl tracking-widest font-mono" autofocus />
                                 <InputError :message="form.errors.otp" />
                             </div>
 
-                            <Button
-                                type="submit"
+                            <Button type="submit"
                                 class="w-full bg-linear-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 py-6 text-lg"
-                                :disabled="form.processing || form.otp.length !== 6"
-                            >
+                                :disabled="form.processing || form.otp.length !== 6">
                                 <Lock class="w-5 h-5 mr-2" />
                                 Verify & Sign In
                             </Button>
@@ -137,14 +125,8 @@ onMounted(() => {
                         <div class="mt-6 text-center space-y-3">
                             <p class="text-sm text-gray-600">Didn't receive the code?</p>
 
-                            <Button
-                                v-if="canResend"
-                                type="button"
-                                @click="resendOtp"
-                                variant="outline"
-                                class="w-full"
-                                :disabled="resendForm.processing"
-                            >
+                            <Button v-if="canResend" type="button" @click="resendOtp" variant="outline" class="w-full"
+                                :disabled="resendForm.processing">
                                 <RefreshCw class="w-4 h-4 mr-2" />
                                 Resend Code
                             </Button>
@@ -153,12 +135,7 @@ onMounted(() => {
                                 Resend available in {{ countdown }}s
                             </p>
 
-                            <Button
-                                type="button"
-                                @click="changeEmail"
-                                variant="ghost"
-                                class="w-full text-sm"
-                            >
+                            <Button type="button" @click="changeEmail" variant="ghost" class="w-full text-sm">
                                 Use a different email
                             </Button>
                         </div>
@@ -174,7 +151,8 @@ onMounted(() => {
 
                 <!-- Footer -->
                 <div class="my-8 text-center">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
                         <Lock class="w-4 h-4 text-pink-200" />
                         <span class="text-sm text-white">Secure authentication 🔐</span>
                     </div>
