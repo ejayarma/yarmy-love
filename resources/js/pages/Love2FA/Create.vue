@@ -100,7 +100,7 @@ const createNew = () => {
                                     <Check class="w-8 h-8 text-green-600" />
                                 </div>
                                 <h2 class="text-2xl font-bold text-gray-900 mb-2">Mystery Created! 🎉</h2>
-                                <p class="text-gray-600">Share these with your recipient</p>
+                                <p class="text-gray-600">Share (<b>indirectly</b>) these with your recipient</p>
                             </div>
 
                             <div class="space-y-4 mb-6">
@@ -128,7 +128,8 @@ const createNew = () => {
                                     <Sparkles class="w-5 h-5 text-yellow-600 mr-3 flex-shrink-0" />
                                     <div>
                                         <p class="text-sm text-yellow-800">
-                                            <strong>Important:</strong> Share BOTH the link and PIN code with your
+                                            <strong>Important:</strong>Share ( <b>indirectly</b> ) BOTH the link and PIN
+                                            code with your
                                             recipient.
                                             They'll need the PIN to unlock the mystery, then they have to guess YOUR
                                             NAME!
@@ -172,8 +173,8 @@ const createNew = () => {
 
                                     <div class="grid gap-2">
                                         <Label for="sender_email">Your Email <span class="text-red-500">*</span></Label>
-                                        <Input disabled id="sender_email" v-model="form.sender_email" type="email" required
-                                            placeholder="your@email.com" />
+                                        <Input disabled id="sender_email" v-model="form.sender_email" type="email"
+                                            required placeholder="your@email.com" />
                                         <p class="text-sm text-gray-600">We'll notify you when they make guesses</p>
                                         <InputError :message="form.errors.sender_email" />
                                     </div>

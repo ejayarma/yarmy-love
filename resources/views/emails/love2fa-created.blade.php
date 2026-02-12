@@ -204,7 +204,7 @@
             <div class="mystery-box">
                 <h3>🕵️ Secret Admirer Mode: Activated</h3>
                 <p>
-                    Your anonymous gift has been created! {{ $recipientName }} will need to enter their PIN
+                    Your anonymous gift has been created! The recipient will need to enter their PIN
                     to unlock the mystery, then guess YOUR NAME to reveal who sent it!
                 </p>
             </div>
@@ -222,7 +222,7 @@
 
             <div class="warning-box">
                 <strong>⚠️ Important - Share Both Items Below:</strong>
-                <p style="margin: 10px 0 0 0;">{{ $recipientName }} needs BOTH the link AND the PIN code to access the mystery!</p>
+                <p style="margin: 10px 0 0 0;">The recipient needs BOTH the link AND the PIN code to access the mystery!</p>
             </div>
 
             <div class="highlight-box">
@@ -231,7 +231,7 @@
                     <a href="{{ $love2faUrl }}" class="link-url">{{ $love2faUrl }}</a>
                 </div>
                 <p style="margin: 0; color: #666; font-size: 14px; text-align: center;">
-                    Send this link to {{ $recipientName }} via text, email, or DM
+                    Send this link <b>indirectly</b> to the recipient via text, email, or DM
                 </p>
             </div>
 
@@ -239,7 +239,7 @@
                 <div class="pin-label">🔑 Step 2: Share This PIN Code</div>
                 <div class="pin">{{ $recipientPincode }}</div>
                 <p style="margin-top: 15px; color: #666; font-size: 14px;">
-                    {{ $recipientName }} needs this 4-digit PIN to unlock the mystery!
+                    The recipient needs this 4-digit PIN to unlock the mystery!
                 </p>
             </div>
 
@@ -250,7 +250,7 @@
             <div class="info-section">
                 <h3>🎯 How Love 2FA Works</h3>
                 <ul>
-                    <li><strong>Step 1 - Share:</strong> Send {{ $recipientName }} both the link and PIN code above</li>
+                    <li><strong>Step 1 - Share:</strong> Send the recipient (<b>indirectly</b>) both the link and PIN code above</li>
                     <li><strong>Step 2 - Unlock:</strong> They enter the PIN to unlock the mystery page</li>
                     <li><strong>Step 3 - Reveal:</strong> They see your gift description and message</li>
                     <li><strong>Step 4 - The Game:</strong> They have {{ $maxAttempts }} attempts to guess YOUR NAME ({{ $senderName }})</li>
@@ -263,7 +263,7 @@
             @if(count($hints) > 0)
             <div class="info-section" style="background: #E3F2FD; border-color: #2196F3;">
                 <h3 style="color: #1565C0;">💡 Your Hints</h3>
-                <p style="margin-bottom: 10px; color: #555;">These clues will help {{ $recipientName }} guess your name if they get stuck:</p>
+                <p style="margin-bottom: 10px; color: #555;">These clues will help The recipient guess your name if they get stuck:</p>
                 <ul>
                     @foreach($hints as $hint)
                     <li>{{ $hint }}</li>
@@ -275,7 +275,7 @@
             <div class="info-section" style="background: #FCE4EC; border-color: #E91E63;">
                 <h3 style="color: #C2185B;">💝 Quick Tips</h3>
                 <ul>
-                    <li><strong>Share wisely:</strong> Make sure {{ $recipientName }} gets both the link AND PIN</li>
+                    <li><strong>Share wisely:</strong> Make sure the recipient gets both the link AND PIN</li>
                     <li><strong>The challenge:</strong> They're guessing "{{ $senderName }}" - your full name!</li>
                     <li><strong>Smart hints:</strong> Make clues clever but not too obvious</li>
                     <li><strong>Stay tuned:</strong> You'll get notified after each guess attempt</li>
